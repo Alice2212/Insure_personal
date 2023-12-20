@@ -30,17 +30,17 @@ const LeadFormOverlay = ({ onClose }) => {
   const location = useLocation();
   const formData = location.state?.formData || {};
 
-  console.log(formData, "formData on agentLeads");
+  // console.log(formData, "formData on agentLeads");
 
   const baseURL = process.env.REACT_APP_BASE_URL;
   const agentLeadsURL = `${baseURL}/agent/lead/${formData.agent.id}`;
 
   const onSubmit = async (data, e) => {
     console.log(data, "reacthookform")
-    console.log("chkaaaaaaaaaaa", leadData);
+    // console.log("chkaaaaaaaaaaa", leadData);
     try {
       const response = await axios.post(agentLeadsURL, data);
-      console.log ("Aliceeeeeee", response)
+      // console.log ("Aliceeeeeee", response)
       if (response.data.status) {
         await Swal.fire({
           title: "Success!",

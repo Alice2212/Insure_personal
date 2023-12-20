@@ -36,6 +36,7 @@ const AdminTeams = () => {
   const agentDataURL = `${baseURL}/company/allcompanyagent/${companyId}`;
 
   const navigate = useNavigate();
+  
   useEffect( () => {
     setFilteredData(transformData(agentDataList));
   }, []);
