@@ -70,7 +70,7 @@ export const AgentLogin = () => {
             confirmButtonText: "OK",
           }).then((result) => {
             if (result.isConfirmed) {
-              navigate("/dashboard/agent");
+              navigate("/dashboard/agent", { state: { formData: res.data.data} });
             }
           });
         } else {

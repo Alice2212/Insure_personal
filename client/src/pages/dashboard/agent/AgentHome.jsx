@@ -11,6 +11,9 @@ import AdminSidebar from '../../../components/molecules/dashboard/AdminSidebar';
 import Track from '../../../components/molecules/dashboard/Track';
 import NotificationBar from '../../../components/molecules/dashboard/NotificationBar';
 import SalesBoxGroup from '../../../components/molecules/dashboard/SalesBoxGroup';
+import Axios from "axios";
+import { useLocation } from 'react-router-dom';
+import { useAuth } from "../../auth/Authentication/AuthContext";
 
 
 Chart.register(CategoryScale);
@@ -34,6 +37,12 @@ const AgentHome = () => {
       }
     ]
   });
+
+  const location = useLocation();
+  const formData = location.state?.formData || {};
+
+  console.log(formData, "formData on agent hompage")
+
 
   return (
     <div>

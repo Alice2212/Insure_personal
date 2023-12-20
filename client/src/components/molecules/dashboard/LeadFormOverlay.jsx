@@ -27,6 +27,7 @@ const LeadFormOverlay = ({ onClose }) => {
     formState: { errors },
   } = useForm();
 
+
   const location = useLocation();
   const formData = location.state?.formData || {};
 
@@ -34,16 +35,37 @@ const LeadFormOverlay = ({ onClose }) => {
 
 
   const baseURL = process.env.REACT_APP_BASE_URL;
-  // const registrationURL = `${baseURL}/agent/lead/${}`;
+  const agentLeadsURL = `${baseURL}/agent/lead/${formData.agent.id}`;
 
-  const onSubmit = async (data, e) => {
-    await axios.post;
+  const onSubmit = async (e) => {
+    console.log('chkaaaaaaaaaaa', leadData);
+    try {
+      const response = await axios.post(agentLeadsURL, leadData);
+
+      if (response.data.status) {
+        await Swal.fire({
+          title: 'Success!',
+          text: 'Lead added successfully!.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
+        e.target.reset();
+
+        // Pass formData as state to the /auth/otp route
+        // navigate('/auth/otp', { state: { formData: response?.data?.data } });
+      }
+    } catch (error) {
+      await Swal.fire({
+        title: 'Error!',
+        text: `Registration failed!!!!!  ${error.response.data.message || error.message}`,
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+      console.log('Error making POST request:', error);
+    }
 
     // Clear the form data
     e.target.reset();
-
-    // Close the form
-    // onClose();
   };
 
   return (
@@ -56,27 +78,26 @@ const LeadFormOverlay = ({ onClose }) => {
           <div className="mb-4">
             <label
               className="block text-[--orange-bg] font-medium mb-2"
-              htmlFor="Fname"
+              htmlFor="firstName"
             >
               First Name
             </label>
             <input
               className="appearance-none border border-[--form-border-bg] rounded w-full py-2 px-3 text-[--black-text] leading-tight focus:outline-none focus:border-[--orange-hover]"
-              id="Fname"
-              value={leadData.firstName}
-              onChange={(e) => {
-                setLeadData({ ...leadData, firstName: e.target.value });
-              }}
+              id="firstName"
+              // value={leadData.firstName}
+              onChange={(e) => { setLeadData({ ...leadData, firstName: e.target.value }); }}
               type="text"
-              name="Fname"
+              name="firstName"
               placeholder="John"
-              {...register("Fname", {
+              {...register("firstName", {
                 required: "this field is required ",
               })}
+              defaultValue={leadData.firstName}
             />
 
             <p className="text-red-500 text-sm italic">
-              {errors.Fname?.message}
+              {errors.firstName?.message}
             </p>
           </div>
 
@@ -85,27 +106,27 @@ const LeadFormOverlay = ({ onClose }) => {
           <div className="mb-4">
             <label
               className="block text-[--orange-bg] font-medium mb-2"
-              htmlFor="Mname"
+              htmlFor="middleName"
             >
               Middle Name
             </label>
             <input
               className="appearance-none border border-[--form-border-bg] rounded w-full py-2 px-3 text-[--black-text] leading-tight focus:outline-none focus:border-[--orange-hover]"
-              id="Mname"
-              value={leadData.middleName}
+              id="middleName"
+              defaultValue={leadData.middleName}
               onChange={(e) => {
                 setLeadData({ ...leadData, middleName: e.target.value });
               }}
               type="text"
-              name="Mname"
+              name="middleName"
               placeholder="Timothy"
-              {...register("Mname", {
+              {...register("middleName", {
                 required: "this field is required ",
               })}
             />
 
             <p className="text-red-500 text-sm italic">
-              {errors.Mname?.message}
+              {errors.middleName?.message}
             </p>
           </div>
 
@@ -114,27 +135,27 @@ const LeadFormOverlay = ({ onClose }) => {
           <div className="mb-4">
             <label
               className="block text-[--orange-bg] font-medium mb-2"
-              htmlFor="Lname"
+              htmlFor="lastName"
             >
               Last Name
             </label>
             <input
               className="appearance-none border border-[--form-border-bg] rounded w-full py-2 px-3 text-[--black-text] leading-tight focus:outline-none focus:border-[--orange-hover]"
-              id="Lname"
-              value={leadData.lastName}
+              id="lastName"
+              defaultValue={leadData.lastName}
               onChange={(e) => {
                 setLeadData({ ...leadData, lastName: e.target.value });
               }}
               type="text"
-              name="Lname"
+              name="lastName"
               placeholder="Doe"
-              {...register("Lname", {
+              {...register("lastName", {
                 required: "this field is required ",
               })}
             />
 
             <p className="text-red-500 text-sm italic">
-              {errors.Lname?.message}
+              {errors.lastName?.message}
             </p>
           </div>
 
@@ -142,27 +163,27 @@ const LeadFormOverlay = ({ onClose }) => {
           <div className="mb-4">
             <label
               className="block text-[--orange-bg] font-medium mb-2"
-              htmlFor="mail"
+              htmlFor="email"
             >
               Email
             </label>
             <input
               className="appearance-none border border-[--form-border-bg] rounded w-full py-2 px-3 text-[--black-text] leading-tight focus:outline-none focus:border-[--orange-hover]"
-              id="mail"
-              value={leadData.email}
+              id="email"
+              defaultValue={leadData.email}
               onChange={(e) => {
                 setLeadData({ ...leadData, email: e.target.value });
               }}
               type="email"
-              name="mail"
+              name="email"
               placeholder="johndoetim@email.com"
-              {...register("mail", {
+              {...register("email", {
                 required: "this field cannot be empty ",
               })}
             />
 
             <p className="text-red-500 text-sm italic">
-              {errors.mail?.message}
+              {errors.email?.message}
             </p>
           </div>
 
@@ -170,53 +191,53 @@ const LeadFormOverlay = ({ onClose }) => {
           <div className="mb-4">
             <label
               className="block text-[--orange-bg] font-medium mb-2"
-              htmlFor="sex"
+              htmlFor="gender"
             >
               Gender
             </label>
             <input
               className="appearance-none border border-[--form-border-bg] rounded w-full py-2 px-3 text-[--black-text] leading-tight focus:outline-none focus:border-[--orange-hover]"
-              id="sex"
-              value={leadData.gender}
+              id="gender"
+              defaultValue={leadData.gender}
               onChange={(e) => {
                 setLeadData({ ...leadData, gender: e.target.value });
               }}
               type="text"
-              name="sex"
+              name="gender"
               placeholder="male/female"
-              {...register("sex", {
+              {...register("gender", {
                 required: "this field cannot be empty ",
               })}
             />
 
-            <p className="text-red-500 text-sm italic">{errors.sex?.message}</p>
+            <p className="text-red-500 text-sm italic">{errors.gender?.message}</p>
           </div>
 
           {/* Address */}
           <div className="mb-4">
             <label
               className="block text-[--orange-bg] font-medium mb-2"
-              htmlFor="location"
+              htmlFor="Address"
             >
               Address
             </label>
             <input
               className="appearance-none border border-[--form-border-bg] rounded w-full py-2 px-3 text-[--black-text] leading-tight focus:outline-none focus:border-[--orange-hover]"
-              id="location"
-              value={leadData.Address}
+              id="Address"
+              defaultValue={leadData.Address}
               onChange={(e) => {
                 setLeadData({ ...leadData, Address: e.target.value });
               }}
               type="text"
-              name="location"
+              name="Address"
               placeholder="No.12 lekki phase 1 Lagos, Nigeria"
-              {...register("location", {
+              {...register("Address", {
                 required: "this field cannot be empty ",
               })}
             />
 
             <p className="text-red-500 text-sm italic">
-              {errors.location?.message}
+              {errors.Address?.message}
             </p>
           </div>
 
@@ -224,27 +245,27 @@ const LeadFormOverlay = ({ onClose }) => {
           <div className="mb-4">
             <label
               className="block text-[--orange-bg] font-medium mb-2"
-              htmlFor="phone"
+              htmlFor="phoneNumber"
             >
               Phone Number
             </label>
             <input
               className="appearance-none border border-[--form-border-bg] rounded w-full py-2 px-3 text-[--black-text] leading-tight focus:outline-none focus:border-[--orange-hover]"
-              id="phone"
-              value={leadData.phoneNumber}
+              id="phoneNumber"
+              defaultValue={leadData.phoneNumber}
               onChange={(e) => {
                 setLeadData({ ...leadData, phoneNumber: e.target.value });
               }}
               type="tel"
-              name="phone"
+              name="phoneNumber"
               placeholder="+234-123-234-1234"
-              {...register("phone", {
+              {...register("phoneNumber", {
                 required: "this field cannot be empty ",
               })}
             />
 
             <p className="text-red-500 text-sm italic">
-              {errors.phone?.message}
+              {errors.phoneNumber?.message}
             </p>
           </div>
 
@@ -252,21 +273,21 @@ const LeadFormOverlay = ({ onClose }) => {
           <div className="mb-4">
             <label
               className="block text-[--orange-bg] font-medium mb-2"
-              htmlFor="policy"
+              htmlFor="policyNumber"
             >
               Policy Number
             </label>
             <input
               className="appearance-none border border-[--form-border-bg] rounded w-full py-2 px-3 text-[--black-text] leading-tight focus:outline-none focus:border-[--orange-hover]"
-              id="policy"
-              value={leadData.policyNumber}
+              id="policyNumber"
+              defaultValue={leadData.policyNumber}
               onChange={(e) => {
                 setLeadData({ ...leadData, policyNumber: e.target.value });
               }}
               type="text"
-              name="policy"
+              name="policyNumber"
               placeholder="xxx-xxx-xx"
-              {...register("policy", {
+              {...register("policyNumber", {
                 required: "this field cannot be empty ",
               })}
             />
@@ -287,7 +308,7 @@ const LeadFormOverlay = ({ onClose }) => {
             <input
               className="appearance-none border border-[--form-border-bg] rounded w-full py-2 px-3 text-[--black-text] leading-tight focus:outline-none focus:border-[--orange-hover]"
               id="AmountPaid"
-              value={leadData.AmountPaid}
+              defaultValue={leadData.AmountPaid}
               onChange={(e) => {
                 setLeadData({ ...leadData, AmountPaid: e.target.value });
               }}

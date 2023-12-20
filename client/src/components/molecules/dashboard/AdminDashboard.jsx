@@ -16,7 +16,7 @@ const AdminDashboard = () => {
         <DashboardTemplate 
             sidebar={<AdminSidebar topic={formData} />}
 
-            notificationSection={<NotificationBar topic={  formData.user.companyProfile.companyName} />}
+            notificationSection={<NotificationBar topic={ formData.user.companyProfile.companyName} />}
             
             dashboardBody={ <Outlet  topic={formData} />}
         />

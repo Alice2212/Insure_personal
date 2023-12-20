@@ -16,6 +16,7 @@ import { useLocation } from 'react-router-dom';
 import { useAuth } from "../../auth/Authentication/AuthContext";
 Chart.register(CategoryScale);
 
+
 const AdminHome = () => {
   const [homeData, setHomeData] = useState("");
   const [chartData, setChartData] = useState({
