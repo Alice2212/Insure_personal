@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import React from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 // import { useAuth } from "../../auth/Authentication/AuthContext";
 
 const LeadFormOverlay = ({ onClose }) => {
@@ -27,27 +27,26 @@ const LeadFormOverlay = ({ onClose }) => {
     formState: { errors },
   } = useForm();
 
-
   const location = useLocation();
   const formData = location.state?.formData || {};
 
-  console.log(formData, "formData on agentLeads")
-
+  console.log(formData, "formData on agentLeads");
 
   const baseURL = process.env.REACT_APP_BASE_URL;
   const agentLeadsURL = `${baseURL}/agent/lead/${formData.agent.id}`;
 
-  const onSubmit = async (e) => {
-    console.log('chkaaaaaaaaaaa', leadData);
+  const onSubmit = async (data, e) => {
+    console.log(data, "reacthookform")
+    console.log("chkaaaaaaaaaaa", leadData);
     try {
-      const response = await axios.post(agentLeadsURL, leadData);
-
+      const response = await axios.post(agentLeadsURL, data);
+      console.log ("Aliceeeeeee", response)
       if (response.data.status) {
         await Swal.fire({
-          title: 'Success!',
-          text: 'Lead added successfully!.',
-          icon: 'success',
-          confirmButtonText: 'OK',
+          title: "Success!",
+          text: "Lead added successfully!.",
+          icon: "success",
+          confirmButtonText: "OK",
         });
         e.target.reset();
 
@@ -56,23 +55,26 @@ const LeadFormOverlay = ({ onClose }) => {
       }
     } catch (error) {
       await Swal.fire({
-        title: 'Error!',
-        text: `Registration failed!!!!!  ${error.response.data.message || error.message}`,
-        icon: 'error',
-        confirmButtonText: 'OK',
+        title: "Error!",
+        text: `Registration failed!!!!!  ${
+          error.response.data.message || error.message
+        }`,
+        icon: "error",
+        confirmButtonText: "OK",
       });
-      console.log('Error making POST request:', error);
+      console.log("Error making POST request:", error);
     }
 
     // Clear the form data
-    e.target.reset();
+    // e.target.reset();
   };
 
   return (
     // <div className="bg-[--black-bg] opacity-50 w-full h-full fixed top-0 left-0 z-10 ">
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-10">
       <div className="max-w-md mx-auto mt-8 p-8 border rounded shadow-lg bg-white">
-        <form onSubmit={(e) => handleSubmit(onSubmit)(e)}>
+        <form onSubmit={handleSubmit(onSubmit)}
+        >
           {/* First Name */}
 
           <div className="mb-4">
@@ -86,7 +88,9 @@ const LeadFormOverlay = ({ onClose }) => {
               className="appearance-none border border-[--form-border-bg] rounded w-full py-2 px-3 text-[--black-text] leading-tight focus:outline-none focus:border-[--orange-hover]"
               id="firstName"
               // value={leadData.firstName}
-              onChange={(e) => { setLeadData({ ...leadData, firstName: e.target.value }); }}
+              onChange={(e) => {
+                setLeadData({ ...leadData, firstName: e.target.value });
+              }}
               type="text"
               name="firstName"
               placeholder="John"
@@ -210,7 +214,9 @@ const LeadFormOverlay = ({ onClose }) => {
               })}
             />
 
-            <p className="text-red-500 text-sm italic">{errors.gender?.message}</p>
+            <p className="text-red-500 text-sm italic">
+              {errors.gender?.message}
+            </p>
           </div>
 
           {/* Address */}
@@ -326,11 +332,16 @@ const LeadFormOverlay = ({ onClose }) => {
           </div>
 
           <div className="flex space-x-3">
-            <input
+            <button
               className="bg-[--orange-bg] hover:bg-[--orange-hover] text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"
               type="submit"
-              value="submit"
-            />
+             // onClick={onSubmit}
+             >
+              Submit
+            </button>
+              
+            {/* </input> */}
+
             <input
               className="bg-[--orange-bg] hover:bg-[--orange-hover] text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"
               type="submit"
