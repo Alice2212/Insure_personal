@@ -5,7 +5,7 @@ import { useAuth } from './AuthContext';
 const PrivateRoutes = ({ role }) => {
     const { auth } = useAuth();
 
-    console.log(auth.token, "auth token")
+    // console.log(auth.token, "auth token")
 
       // Check if authentication exists and user has the required role
   const isAuthorized = auth.token && auth.role === role;

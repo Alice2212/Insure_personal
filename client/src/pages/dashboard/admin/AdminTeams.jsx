@@ -16,38 +16,28 @@ const AdminTeams = () => {
   const formData = location.state?.formData || {};
   const companyId = formData.user.companyProfile.id;
 
-  const newAgentList = agentDataList.map((data) => ({
-    fullName: `${data.firstName} ${data.lastName}`,
-    agentID: `${formData.user.companyProfile.companyName
-      .slice(0, 3)
-      .toUpperCase()}/${data.id}`,
-    role: "Agent",
-    email: `${data.email}`,
-    dateAdded: `${new Date(data.createdAt).toDateString()}`,
-  }));
-  console.log(transformData(newAgentList))
-
-  // useEffect(() => {
-  //   setAgentDataList(newAgentList);
-  //   // console.log(agentDataList)
-  // }, [newAgentList]);
 
   const baseURL = process.env.REACT_APP_BASE_URL;
   const agentDataURL = `${baseURL}/company/allcompanyagent/${companyId}`;
 
   const navigate = useNavigate();
-  
-  useEffect( () => {
-    setFilteredData(transformData(agentDataList));
-  }, []);
-
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const agentData = await fetchAgentData();
-        setAgentDataList(agentData);
-        setFilteredData(transformData(agentData));
+
+        const newAgentList = agentData.map((data) => ({
+          fullName: `${data.firstName} ${data.lastName}`,
+          agentID: `${formData.user.companyProfile.companyName
+            .slice(0, 3)
+            .toUpperCase()}/${data.id}`,
+          role: "Agent",
+          email: `${data.email}`,
+          dateAdded: `${new Date(data.createdAt).toDateString()}`,
+        }));
+        setAgentDataList(newAgentList);
+        setFilteredData(transformData(newAgentList));
       } catch (error) {
         console.error("Error fetching agent data:", error);
       }
@@ -87,22 +77,22 @@ const AdminTeams = () => {
   return (
     <div>
       <Searchbar
-        data={TeamData}
-        keyword="Name"
+        data={agentDataList}
+        keyword="fullName"
         onUpdateData={updateFilteredData}
       />
       <div className="flex justify-between mb-4"></div>
 
       {/* <ActionButton title="Invite Agent"  /> */}
       <button
-              onClick={handleButtonClick}
-              type="submit"
-              className="sm:w-full lg:w-[20%] h-[40px] bg-orange-600 text-white font-bold py-2 px-2 rounded-md hover:bg-orange-400 mb-2"
-            >
-              Invite Agent
-            </button>
+        onClick={handleButtonClick}
+        type="submit"
+        className="sm:w-full lg:w-[20%] h-[40px] bg-orange-600 text-white font-bold py-2 px-2 rounded-md hover:bg-orange-400 mb-2"
+      >
+        Invite Agent
+      </button>
 
-      <Table data={{ tableHead, tabledata: transformData(newAgentList) }} />
+      <Table data={{ tableHead, tabledata: filteredData }} />
 
     </div>
   );

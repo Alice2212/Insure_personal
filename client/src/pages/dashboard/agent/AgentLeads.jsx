@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import ActionButton from "../../../components/molecules/dashboard/ActionButton";
 import Searchbar from "../../../components/molecules/dashboard/Searchbar";
 import LeadFormOverlay from "../../../components/molecules/dashboard/LeadFormOverlay";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import Axios from "axios";
 
@@ -32,31 +32,31 @@ const AgentLeads = () => {
     const fetchLeadsData = async () => {
       try {
         const agentLeadsData = await fetchAgentLeadsData();
-        
+
         setAgentLeadsList(agentLeadsData);
-        
+
         // setFilteredData(transformData(agentLeadsData));
       } catch (error) {
         console.error("Error fetching agent data:", error);
       }
     };
-    
+
     fetchLeadsData();
   }, [agentId]); // Ensure the useEffect runs when companyId changes
-  
-  
+
+
   const fetchAgentLeadsData = async () => {
     try {
       const res = await Axios.get(agentDataURL);
-      // console.log("response on agentleads pagesssss", res);
+      console.log("response on agentleads pagesssss", res);
       return res?.data?.data?.rows || [];
     } catch (error) {
       console.error("Error fetching agent data:", error);
       return [];
     }
   };
-  
-  console.log("Iyaannnnnnnuuuuuu", agentLeadsList);
+
+  // console.log("Iyaannnnnnnuuuuuu", agentLeadsList);
 
   const handleOnDragStart = (e, lead) => {
     e.dataTransfer.setData("text/plain", lead.id.toString());
@@ -98,7 +98,17 @@ const AgentLeads = () => {
   return (
     <>
       <Searchbar />
-      <ActionButton title="Add New" onClick={handleButtonClick} />
+      <button
+        onClick={handleButtonClick}
+        type="submit"
+        className="sm:w-full lg:w-[20%] h-[40px] bg-orange-600 text-white font-bold py-2 px-2 rounded-md hover:bg-orange-400 mb-2"
+      >
+        Add Lead
+      </button>
+      {/* <div className="w-[7rem">
+        <ActionButton title="Add New" onClick={handleButtonClick} />
+      </div> */}
+
       {isOverlayVisible && <LeadFormOverlay onClose={handleOverlayClose} />}
       <section className="bg-[#DFE7FA] h-screen w-full flex flex-wrap justify-between">
         {/* New Leads */}
@@ -143,7 +153,7 @@ const AgentLeads = () => {
             >
               <h4 className="text-gray-800 pb-1">{lead.name}</h4>
               <p className="text-gray-600">{lead.description}</p>
-              <p className="text-gray-400 text-right">See More</p>
+              {/* <p className="text-gray-400 text-right">See More</p> */}
             </div>
           ))}
         </div>
@@ -165,7 +175,7 @@ const AgentLeads = () => {
             >
               <h4 className="text-gray-800 pb-1">{lead.name}</h4>
               <p className="text-gray-600">{lead.description}</p>
-              <p className="text-gray-400 text-right">See More</p>
+              {/* <p className="text-gray-400 text-right">See More</p> */}
             </div>
           ))}
         </div>
