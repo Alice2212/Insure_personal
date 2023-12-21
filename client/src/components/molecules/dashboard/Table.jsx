@@ -44,13 +44,13 @@ const Table = ({ data }) => {
         <td className="px-6 py-4">{leads.data4}</td>
         <td className="px-6 py-4">{leads.data5}</td>
         <td className="px-6 py-4">
-          <DropDownMenu
+          {leads.data6 || <DropDownMenu
             data={{
               actionState: ["Approve", "Reject", "Transfer"],
               defaultdata: leads.data7,
             }}
             id={String(index + 1)}
-          />
+          />}
         </td>
       </tr>
     );

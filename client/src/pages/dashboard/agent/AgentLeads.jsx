@@ -1,8 +1,11 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ActionButton from "../../../components/molecules/dashboard/ActionButton";
 import Searchbar from "../../../components/molecules/dashboard/Searchbar";
 import LeadFormOverlay from "../../../components/molecules/dashboard/LeadFormOverlay";
+// import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import Axios from "axios";
 
 const AgentLeads = () => {
   // lead data
@@ -11,12 +14,49 @@ const AgentLeads = () => {
     { id: 2, name: "Abbas Ahmed", description: "Dev Reels" },
     { id: 3, name: "Alicia Joseph", description: "Software Dev" },
   ];
-
   const [isOverlayVisible, setOverlayVisible] = useState(false);
   const [newLeads, setNewLeads] = useState(initialLeads);
   const [inProgress, setInProgress] = useState([]);
-  const [closedLeads, setClosedLeads] = useState([]);
+  const [closedLeads, setClosedLeads] = useState([])
+  const [agentLeadsList, setAgentLeadsList] = useState([]);
 
+
+  const location = useLocation();
+  const formData = location.state?.formData || {};
+  const agentId = formData.agent.id
+
+  const baseURL = process.env.REACT_APP_BASE_URL;
+  const agentDataURL = `${baseURL}/agent/alleads/${agentId}`;
+
+  useEffect(() => {
+    const fetchLeadsData = async () => {
+      try {
+        const agentLeadsData = await fetchAgentLeadsData();
+
+        setAgentLeadsList(agentLeadsData);
+
+        // setFilteredData(transformData(agentLeadsData));
+      } catch (error) {
+        console.error("Error fetching agent data:", error);
+      }
+    };
+
+    fetchLeadsData();
+  }, [agentId]); // Ensure the useEffect runs when companyId changes
+
+
+  const fetchAgentLeadsData = async () => {
+    try {
+      const res = await Axios.get(agentDataURL);
+      console.log("response on agentleads pagesssss", res);
+      return res?.data?.data?.rows || [];
+    } catch (error) {
+      console.error("Error fetching agent data:", error);
+      return [];
+    }
+  };
+
+  // console.log("Iyaannnnnnnuuuuuu", agentLeadsList);
 
   const handleOnDragStart = (e, lead) => {
     e.dataTransfer.setData("text/plain", lead.id.toString());
@@ -58,7 +98,17 @@ const AgentLeads = () => {
   return (
     <>
       <Searchbar />
-      <ActionButton title="Add New" onClick={handleButtonClick} />
+      <button
+        onClick={handleButtonClick}
+        type="submit"
+        className="sm:w-full lg:w-[20%] h-[40px] bg-orange-600 text-white font-bold py-2 px-2 rounded-md hover:bg-orange-400 mb-2"
+      >
+        Add Lead
+      </button>
+      {/* <div className="w-[7rem">
+        <ActionButton title="Add New" onClick={handleButtonClick} />
+      </div> */}
+
       {isOverlayVisible && <LeadFormOverlay onClose={handleOverlayClose} />}
       <section className="bg-[#DFE7FA] h-screen w-full flex flex-wrap justify-between">
         {/* New Leads */}
@@ -70,16 +120,17 @@ const AgentLeads = () => {
           <h4 className="text-[#111111] bg-yellow-200 w-full uppercase h-fit text-center p-2">
             New Leads
           </h4>
-          {newLeads.map((lead) => (
+          {agentLeadsList.map((lead) => (
             <div
               key={lead.id}
               className="widget border border-gray-400 p-4 m-4 rounded-md w-auto"
               draggable
               onDragStart={(e) => handleOnDragStart(e, lead)}
             >
-              <h4 className="text-gray-800 pb-1">{lead.name}</h4>
-              <p className="text-gray-600">{lead.description}</p>
-              <p className="text-gray-400 text-right">See More</p>
+              <p className="text-gray-800 pb-1">{`${lead.firstName} ${lead.lastName}`}</p>
+              <p className="text-gray-600">{lead.email}</p>
+              <p className="text-gray-600">{lead.phoneNumber}</p>
+              {/* <button className="text-gray-400 text-right">See More</button> */}
             </div>
           ))}
         </div>
@@ -102,7 +153,7 @@ const AgentLeads = () => {
             >
               <h4 className="text-gray-800 pb-1">{lead.name}</h4>
               <p className="text-gray-600">{lead.description}</p>
-              <p className="text-gray-400 text-right">See More</p>
+              {/* <p className="text-gray-400 text-right">See More</p> */}
             </div>
           ))}
         </div>
@@ -124,7 +175,7 @@ const AgentLeads = () => {
             >
               <h4 className="text-gray-800 pb-1">{lead.name}</h4>
               <p className="text-gray-600">{lead.description}</p>
-              <p className="text-gray-400 text-right">See More</p>
+              {/* <p className="text-gray-400 text-right">See More</p> */}
             </div>
           ))}
         </div>

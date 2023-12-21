@@ -6,7 +6,7 @@ const AgentSidebar = (props) => {
     const [isMenuOpen, setMenuOpen] = useState(false)
 
     const {topic} = props
-    console.log(topic, "topic on agent sidebar")
+    // console.log(topic, "topic on agent sidebar")
     const location = useLocation();
 
     const handleLinkClick = (link) => {

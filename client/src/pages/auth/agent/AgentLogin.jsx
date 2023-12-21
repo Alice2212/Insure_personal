@@ -48,21 +48,9 @@ export const AgentLogin = () => {
 
     await Axios.post(loginURL, { email, password })
       .then((res) => {
-        console.log(res);
-        console.log(res.data.status);
-        console.log(
-          res.data.accessToken.access.token,
-          res.data.data.agent.id,
-          "agent"
-        );
-
-        login(
-          res.data.accessToken.access.token,
-          res.data.data.agent.id,
-          "agent"
-        );
         if (res.data.status) {
           setIsLoading(false);
+          login( res.data.accessToken.access.token, res.data.data.agent.id, "agent");
           Swal.fire({
             title: "Success!",
             text: "Login succesfull!!!!!",

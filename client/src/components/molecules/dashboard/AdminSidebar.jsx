@@ -7,7 +7,7 @@ const AdminSidebar = (props) => {
 
     const topic = props.topic
 
-    console.log(topic, "topic on sidebar")
+    // console.log(topic, "topic on sidebar")
 
     const location = useLocation()
 
